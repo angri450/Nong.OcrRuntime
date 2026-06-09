@@ -1,0 +1,9 @@
+bin/
+obj/
+.tmp/
+nupkg/
+_archive/
+*.nupkg
+*.snupkg
+*.user
+.vs/
