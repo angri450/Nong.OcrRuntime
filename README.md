@@ -2,7 +2,9 @@
 
 Dedicated repository for Nong local OCR native runtime NuGet packages.
 
-These packages contain platform-specific PaddleInference and OpenCvSharp native files for `nong ocr install-model pp-ocrv5-mobile`. They do not contain Python, pip packages, external OCR executables, or user-trained models.
+These packages contain platform-specific PaddleInference and OpenCvSharp native files for `nong ocr install-model pp-ocrv6-medium`. They do not contain Python, pip packages, external OCR executables, or user-trained models.
+
+PaddleOCR 3.7.0 introduced a Python-side `engine` switch that can target ONNX Runtime. That does not automatically change these NuGet runtime bundles: Nong's current .NET PP-OCRv6 path consumes Sdcb.PaddleOCR/Sdcb.PaddleInference native packages, and the latest `Sdcb.PaddleInference.runtime.*` packages remain `3.3.1.70`. Some upstream PaddleInference packages may carry ONNX-related native DLLs such as `onnxruntime.dll`; those files are transitive PaddleInference payload, not a supported `engine=onnxruntime` contract. Add a separate ONNX runtime package only if Nong adds an ONNX-based OCR client.
 
 ## Package Matrix
 
@@ -23,6 +25,7 @@ All five package definitions are maintained here. A release may publish only a v
 - The Nong.NET CLI repository pins the consumed runtime version in `Cli/Common/OcrRuntimeVersion.cs`.
 - CLI, Word, PDF, Excel, and PPT patch releases do not republish these large native runtime packages.
 - Bump this repository only when native Paddle/OpenCV contents or the runtime install contract changes.
+- Do not bump this repository for upstream Python PaddleOCR engine changes unless the first-party native bundle contents or backend contract also changes.
 
 ## Pack
 
@@ -51,7 +54,7 @@ The script restores required upstream native packages into the NuGet cache when 
 Users should not reference these packages directly. They install through Nong CLI:
 
 ```powershell
-nong ocr install-model pp-ocrv5-mobile --source https://mirrors.huaweicloud.com/repository/nuget/v3/index.json --json
+nong ocr install-model pp-ocrv6-medium --source https://mirrors.huaweicloud.com/repository/nuget/v3/index.json --json
 ```
 
 Upstream Sdcb/OpenCvSharp fallback in Nong CLI remains explicit and must use `--allow-upstream-fallback`.
